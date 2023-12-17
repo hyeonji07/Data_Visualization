@@ -182,7 +182,7 @@ fig2.show()
 
 ```{python}
 #| title: 속력별 경로시각화        
-fig3.show()
+fig3.show(config={'scrollZoom':False})
 ```
 
 
@@ -334,12 +334,12 @@ fig5.show(config={'scrollZoom':False})
 
 ```{python}
 #| title:  에너지사용량차이(전기-도시가스) 시각화        
-fig4.show()
+fig4.show(config={'scrollZoom':False})
 ```
 
 ```{python}
 #| title: (서울+김포)특별시?        
-fig5.show()
+fig5.show(config={'scrollZoom':False})
 ```
 
 
