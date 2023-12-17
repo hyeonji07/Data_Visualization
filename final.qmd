@@ -1,5 +1,5 @@
 ---
-title: "에너지사용량 자료 분석"
+title: "기말고사 대비"
 author: "전현지(2019-18834)"
 format: dashboard
 execute: 
