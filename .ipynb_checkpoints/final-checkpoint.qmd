@@ -407,6 +407,24 @@ fig7 = tidydata.plot.scatter(
 )
 fig7.show()
 
+
+#### (3)
+tidydata = tidy1.query('Continent == "Asia"').pivot_table(index = 'Nationality', values = ['Overall', 'Age'], aggfunc = {'Overall' : 'mean', 'Age' : 'count'} ).reset_index()\
+.rename({'Age':'PlayerSize'}, axis = 1).assign(Strength = lambda _df : _df.Overall +_df.PlayerSize/5).sort_values('Strength', ascending = False)\
+.reset_index(drop = True).assign(prob = lambda _df : _df.index < 8).rename({'prob':'8강 가능성'}, axis = 1)
+
+tidydata
+
+tidydata = tidydata.assign(a = (tidydata['Overall']).round(2).astype(str) + '+' + tidydata['PlayerSize'].astype(str) + '=' + tidydata['Strength'].astype(str))
+tidydata
+
+fig8 =tidydata.plot.bar(
+    x='Strength',y='Nationality',
+    color='8강 가능성',
+    text= 'a',
+    title = 'Figure1 : Overall + PlayerSize = Strength '
+)
+
 ```
 
 
@@ -418,9 +436,12 @@ fig6.show()
 
 ```{python}
 #| title: 대륙별 인적자원 시각화        
-fig7.show(config={'scrollZoom':False})
+fig7.show()
 ```
-
+```{python}
+#| title: 아시안컵은 누가 차지할까        
+fig8.show()
+```
 
 
 
