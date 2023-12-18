@@ -1,6 +1,6 @@
 ---
 title: "기말고사 대비"
-author: "전현지(2019-18834)"
+author: "전현지"
 format: dashboard
 execute: 
   enabled: true
@@ -344,6 +344,70 @@ fig5.show(config={'scrollZoom':False})
 
 
 
+# 기말고사3-(1),(2)
+```{python}
+#| output: false
+df=pd.read_csv('https://raw.githubusercontent.com/guebin/DV2021/master/_notebooks/2021-10-25-FIFA22_official_data.csv').drop(['Loaned From','Marking'],axis=1).dropna()
+df.head()
+
+continent_dict = {
+    'Asia': ['Afghanistan', 'Japan', 'Macau', 'Chinese Taipei', 'Indonesia', 'Korea Republic', 'Kazakhstan', 'Kyrgyzstan', 'Bhutan', 'Philippines', 'Syria', 'China PR', 'Oman', 'Guam', 'Vietnam', 'Jordan', 'Palestine', 'Malaysia', 'Hong Kong', 'Korea DPR', 'Lebanon', 'Uzbekistan', 'India','Iraq', 'Iran', 'Saudi Arabia', 'United Arab Emirates','Australia'],
+    'Europe': ['Portugal', 'Germany', 'Belgium', 'Netherlands', 'Croatia', 'Spain', 'Austria', 'Italy', 'France', 'Serbia', 'England', 'Poland', 'Ukraine', 'Wales', 'Scotland', 'Czech Republic', 'Slovakia', 'Romania', 'Bosnia and Herzegovina', 'Republic of Ireland', 'Norway', 'Sweden', 'Bulgaria', 'Lithuania', 'Estonia', 'Latvia', 'Liechtenstein','Albania','Denmark','Finland','Greece','Hungary','Iceland','Luxembourg','Northern Ireland','Slovenia','Switzerland','Andorra','Azerbaijan','Belarus','Cyprus','Faroe Islands','Georgia','Kosovo','Malta','Moldova','Montenegro','North Macedonia','Armenia','Gibraltar','Russia','Turkey','Israel'],
+    'South America': ['Uruguay', 'Argentina', 'Brazil', 'Chile', 'Colombia', 'Ecuador', 'Paraguay', 'Venezuela', 'Suriname', 'Bolivia','Peru','Guyana'],
+    'Africa': ['Egypt', "Côte d'Ivoire", 'Senegal', 'Morocco', 'Ghana', 'Algeria', 'Guinea', 'Mali', 'Congo DR', 'Liberia', 'Cameroon', 'Tunisia', 'Comoros', 'Kenya', 'South Africa', 'Zimbabwe', 'Madagascar', 'Mozambique', 'Equatorial Guinea', 'Congo', 'Burundi', 'Grenada', 'Thailand', 'Togo', 'Sudan', 'Mauritania','Guinea Bissau','Libya','Nigeria','Zambia','Angola','Benin','Burkina Faso','Cape Verde Islands','Central African Republic','Chad','Eritrea','Gabon','Gambia','Mauritius','Namibia','Rwanda','Sierra Leone','South Sudan','São Tomé e Príncipe','Uganda','Niger'],
+    'North and Central America': ['Antigua and Barbuda', 'Barbados', 'Belize', 'Bermuda', 'Canada', 'Costa Rica', 'Cuba', 'Curacao', 'Dominican Republic', 'El Salvador', 'Guatemala', 'Haiti', 'Honduras', 'Jamaica', 'Mexico', 'Montserrat', 'Panama', 'Puerto Rico', 'Saint Kitts and Nevis', 'Saint Lucia', 'Trinidad and Tobago', 'United States'],
+    'Oceania': ['New Zealand', 'Fiji', 'Papua New Guinea','New Caledonia'],
+}
+position_dict = {
+    'GOALKEEPER':{'GK'},
+    'DEFENDER':{'CB','RCB','LCB','RB','LB','RWB','LWB'},
+    'MIDFIELDER':{'CM','RCM','LCM','CDM','RDM','LDM','CAM','RAM','LAM','RM','LM'},
+    'FORWARD':{'ST','CF','RF','LF','RW','LW','RS','LS'},
+    'SUB':{'SUB'},
+    'RES':{'RES'}
+}
+
+# df전처리
+tidy1 = df.assign(Position = df.Position.str.split('>').str[-1].apply(lambda x: [k for k,v in position_dict.items() if x in v].pop()),
+          Continent = df.Nationality.apply(lambda x : [k for k,v in continent_dict.items() if x in v].pop()),
+          Wage = df.Wage.str[1:].str.replace('M','*1000000').str.replace('K','*1000').apply(eval)).eval('logWage = log(Wage)')
+tidy1
+
+#####문제1
+####(1)
+tidydata = tidy1.pivot_table(index = 'Continent', values = ['Overall', 'logWage','Age'],aggfunc={'Overall': 'mean', 'logWage': 'mean', 'Age': 'count'})\
+.reset_index().rename({'Age' : 'PlayerSize','Overall' : 'Overall(Mean)','logWage':'logWage(Mean)' }, axis = 1)
+tidydata
+
+
+fig6 = tidydata.plot.scatter(
+    x='Overall(Mean)',y='logWage(Mean)',
+    color='Continent',
+    size='PlayerSize',
+    width=600,
+    text = 'Continent',
+
+    title =  'Figure1 : 인적자원(대륙별)'
+)
+fig6.show()
+
+
+####(2)
+tidydata = tidy1.pivot_table(index = ['Continent','Nationality'], values = ['Overall', 'logWage','Age'],aggfunc={'Overall': 'mean', 'logWage': 'mean', 'Age': 'count'})\
+.reset_index().rename({'Age' : 'PlayerSize','Overall' : 'Overall(Mean)','logWage':'logWage(Mean)' }, axis = 1)
+tidydata
+
+fig7 = tidydata.plot.scatter(
+    x='Overall(Mean)',y='logWage(Mean)',
+    color='Continent',
+    size='PlayerSize',
+    hover_data = ['Nationality'],
+    width=600,
+    title =  'Figure2 : 인적자원(국가별)'
+)
+fig7.show()
+
+```
 
 
 
