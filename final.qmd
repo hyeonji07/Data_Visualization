@@ -411,6 +411,15 @@ fig7.show()
 
 
 
+```{python}
+#| title:  대륙별 인적자원 시각화        
+fig6.show()
+```
+
+```{python}
+#| title: 대륙별 인적자원 시각화        
+fig7.show(config={'scrollZoom':False})
+```
 
 
 
