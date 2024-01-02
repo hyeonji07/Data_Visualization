@@ -1,5 +1,5 @@
 ---
-title: "기말고사 대비"
+title: "final"
 author: "전현지"
 format: dashboard
 execute: 
