@@ -1,3 +1,3 @@
 # final_exam
-기말고사 예상문제
+데이터 시각화
 https://hyeonji07.github.io/final_exam/final.html

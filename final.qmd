@@ -1,5 +1,5 @@
 ---
-title: "기말고사 대비"
+title: "데이터 시각화"
 author: "전현지"
 format: dashboard
 execute: 
